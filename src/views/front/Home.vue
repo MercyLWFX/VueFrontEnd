@@ -94,9 +94,9 @@
             </div>
         </div>
         <div class="click_view_more">
-            <a href="bisai/">
+            <router-link to="/front/more">
                 点击查看更多&gt;&gt;
-            </a>
+            </router-link>
         </div>
 
 

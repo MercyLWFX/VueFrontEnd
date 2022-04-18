@@ -22,8 +22,8 @@
                         <el-menu-item index="2-4-3">选项3</el-menu-item>
                     </el-submenu>
                 </el-submenu>
-                <el-menu-item index="3">已报科目</el-menu-item>
-                <el-menu-item index="4"><router-link to="/front/cart"  target="_blank">预报名管理</router-link></el-menu-item>
+                <el-menu-item index="/front/sign">已报名</el-menu-item>
+                <el-menu-item index="/front/cart">预报名管理</el-menu-item>
             </el-menu>
         </div>
         <div style="width: 200px">

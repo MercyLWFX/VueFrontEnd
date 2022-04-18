@@ -10,9 +10,29 @@ import Role from "@/views/Role";
 import Menu from "@/views/Menu";
 import QualificationClass from "@/views/QualificationClass";
 import Exam from "@/views/Exam";
+import Pay from "@/views/front/Pay";
+import PaySuccess from "@/views/front/PaySuccess";
 
 
 Vue.use(VueRouter)
+
+//解决编程式路由往同一地址跳转时会报错的情况
+const originalPush = VueRouter.prototype.push;
+const originalReplace = VueRouter.prototype.replace;
+//push
+VueRouter.prototype.push = function push(location, onResolve, onReject) {
+    if (onResolve || onReject)
+        return originalPush.call(this, location, onResolve, onReject);
+    return originalPush.call(this, location).catch(err => err);
+};
+//replace
+VueRouter.prototype.replace = function push(location, onResolve, onReject) {
+    if (onResolve || onReject)
+        return originalReplace.call(this, location, onResolve, onReject);
+    return originalReplace.call(this, location).catch(err => err);
+};
+
+
 const routes = [
     {
         path: '/login',
@@ -41,7 +61,7 @@ const routes = [
 
             },
             {
-                path: 'more/:ascription',
+                path: 'more',
                 name: 'More',
                 component: () => import('../views/front/More.vue'),
             },
@@ -49,6 +69,21 @@ const routes = [
                 path: 'cart',
                 name: 'Cart',
                 component: () => import('../views/front/Cart.vue'),
+            },
+            {
+                path: 'sign',
+                name: 'Sign',
+                component: () => import('../views/front/Sign.vue'),
+            },
+            {
+                path: 'pay',
+                name: 'Pay',
+                component: Pay,
+            },
+            {
+                path: 'paySuccess',
+                name: 'PaySuccess',
+                component: PaySuccess,
             }
 
         ]

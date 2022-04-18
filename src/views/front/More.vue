@@ -53,7 +53,7 @@
                 pageSize: 10,
                 tableData: [],
                 total:0,
-                ascription:this.$route.params.ascription
+                ascription:this.$route.query.ascription
             }
         },
         components: {

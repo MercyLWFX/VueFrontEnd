@@ -26,11 +26,6 @@
                     label="报考名称"
                     width="280">
             </el-table-column>
-            <el-table-column
-                    label="报名状态"
-                    width="180">
-                未报名
-            </el-table-column>
 
             <el-table-column
                     prop="expense"
@@ -58,108 +53,12 @@
                 </template>
             </el-table-column>
         </el-table>
-        <div class="cart">
-            <div class="cart-tool">
-                <div class="select-all">
-                    <el-button @click="toggleSelection(tableData)">全选</el-button>
-                    <el-button @click="toggleSelection()">取消选择</el-button>
-                </div>
-                <div class="option">
-                    <a href="#none">删除选中的商品</a>
-                </div>
-                <div class="money-box">
-                    <div class="chosed">已选择
-                        <span>0</span>件商品</div>
-                    <div class="sumprice">
-                        <em>总价（不含运费） ：</em>
-                        <i class="summoney">{{total}}</i>
-                    </div>
-                    <div class="sumbtn">
-                        <router-link class="sum-btn" :to="`/front/pay?total=${total}`">结算</router-link>
-                    </div>
-                </div>
-            </div>
-        </div>
-
     </div>
-    <!-- 购物车列表 -->
-<!--    <div class="cart">
-
-        <h4>全部商品</h4>
-        <div class="cart-main">
-            <div class="cart-th">
-                <div class="cart-th1">全部</div>
-                <div class="cart-th2">商品</div>
-                <div class="cart-th3">单价（元）</div>
-&lt;!&ndash;                <div class="cart-th5">小计（元）</div>&ndash;&gt;
-                <div class="cart-th6">操作</div>
-            </div>
-            <div class="cart-body">
-                <ul class="cart-list" v-for="item in tableData" :key="item.id">
-                    <li class="cart-list-con1">
-                        <input type="checkbox" name="chk_list">
-                    </li>
-                    <li class="cart-list-con2">
-                        <img :src="item.imgurl">
-                    </li>
-                    <li class="cart-list-con3">
-                        <div class="item-msg">{{item.examName}}</div>
-                    </li>
-
-                    <li class="cart-list-con4">
-                        <span class="price">{{item.expense}}</span>
-                    </li>
-&lt;!&ndash;                    <li class="cart-list-con5">
-                        <a href="javascript:void(0)" class="mins">-</a>
-                        <input autocomplete="off" type="text" value="1" minnum="1" class="itxt">
-                        <a href="javascript:void(0)" class="plus">+</a>
-                    </li>&ndash;&gt;
-&lt;!&ndash;                    <li class="cart-list-con6">
-                        <span class="sum">399</span>
-                    </li>&ndash;&gt;
-                    <li class="cart-list-con7">
-                        <a href="#none" class="sindelet">删除</a>
-                        <br>
-                        <a href="#none">移到收藏</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <div class="cart-tool">
-            <div class="select-all">
-                <el-checkbox>全选</el-checkbox>
-            </div>
-&lt;!&ndash;            <el-table-column&ndash;&gt;
-&lt;!&ndash;                    class="select-all"&ndash;&gt;
-&lt;!&ndash;                    type="selection"&ndash;&gt;
-&lt;!&ndash;                    width="55">&ndash;&gt;
-&lt;!&ndash;            </el-table-column>&ndash;&gt;
-            <div class="option">
-                <a href="#none">删除选中的报名</a>
-                <a href="#none">移到我的关注</a>
-                <a href="#none">清除下柜商品</a>
-            </div>
-            <div class="money-box">
-                <div class="chosed">已选择
-                    <span>0</span>件商品
-                </div>
-                <div class="sumprice">
-                    <em>总价（不含运费） ：</em>
-                    <i class="summoney">0</i>
-                </div>
-                <div class="sumbtn">
-                    <a class="sum-btn" href="###" target="_blank">结算</a>
-                </div>
-            </div>
-        </div>
-    </div>-->
-
 </template>
 
 <script>
-    import user from "@/views/User";
-
     export default {
+        name:"Sign",
         data() {
             return {
                 tableData: [],

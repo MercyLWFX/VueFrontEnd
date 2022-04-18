@@ -8,7 +8,7 @@
                     <div class="all-sort-list2">
                         <div class="item bo" v-for="item in tableData" :key="item.categoryId">
                             <h3>
-                                <router-link :to="`/front/more/${item.ascription}`">{{ item.classification }}</router-link>
+                                <router-link :to="`/front/more?ascription=${item.ascription}`">{{ item.classification }}</router-link>
                             </h3>
                             <div class="item-list clearfix">
                                 <div class="subitem">
