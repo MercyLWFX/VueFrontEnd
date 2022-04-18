@@ -124,11 +124,12 @@
                         this.request.post("/sign/changeList",ids).then(res => {
                             if (res.code === '200') {
                                this.$message.success("支付成功")
+                                setTimeout(()=>{
+                                    this.$router.push("/front/paySuccess")
+                                },2000)
                             }
                         })
-                        setTimeout(()=>{
-                            this.$router.push("/front/paySuccess")
-                        },2000)
+
                     }else {
                         console.log("啦啦啦啦啦啦啦，我就是数字，爱你哦")
                         this.request.get("/sign/changeOne",{
@@ -138,11 +139,12 @@
                         }).then(res => {
                             if (res.code === '200') {
                                 this.$message.success("支付成功")
+                                setTimeout(()=>{
+                                    this.$router.push("/front/paySuccess")
+                                },2000)
                             }
                         })
-                        setTimeout(()=>{
-                            this.$router.push("/front/paySuccess")
-                        },2000)
+
                     }
 
                 }

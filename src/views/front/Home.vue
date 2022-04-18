@@ -16,51 +16,12 @@
         <div class="right">
             <div class="news">
                 <h4>
-                    <em class="fl">了解最热</em>
+                    <em class="fl">站点文章</em>
                 </h4>
                 <div class="clearix"></div>
                 <ul class="news-list unstyled">
-                    <li>
-                        <span class="bold">[特惠]</span>备战开学季 全民半价购数码
-                    </li>
-                    <li>
-                        <span class="bold">[公告]</span>备战开学季 全民半价购数码
-                    </li>
-                    <li>
-                        <span class="bold">[特惠]</span>备战开学季 全民半价购数码
-                    </li>
-                    <li>
-                        <span class="bold">[特惠]</span>备战开学季 全民半价购数码
-                    </li>
-                    <li>
-                        <span class="bold">[特惠]</span>备战开学季 全民半价购数码
-                    </li>
-                    <li>
-                        <span class="bold">[特惠]</span>备战开学季 全民半价购数码
-                    </li>
-                    <li>
-                        <span class="bold">[特惠]</span>备战开学季 全民半价购数码
-                    </li>
-                    <li>
-                        <span class="bold">[特惠]</span>备战开学季 全民半价购数码
-                    </li>
-                    <li>
-                        <span class="bold">[特惠]</span>备战开学季 全民半价购数码
-                    </li>
-                    <li>
-                        <span class="bold">[特惠]</span>备战开学季 全民半价购数码
-                    </li>
-                    <li>
-                        <span class="bold">[特惠]</span>备战开学季 全民半价购数码
-                    </li>
-                    <li>
-                        <span class="bold">[特惠]</span>备战开学季 全民半价购数码
-                    </li>
-                    <li>
-                        <span class="bold">[公告]</span>备战开学季 全民半价购数码
-                    </li>
-                    <li>
-                        <span class="bold">[特惠]</span>备战开学季 全民半价购数码
+                    <li v-for="item in articleData" :key="item.id">
+                        <router-link :to="`/front/articleDetail?id= ${item.id}`">{{item.name}}</router-link>
                     </li>
                 </ul>
             </div>
@@ -121,6 +82,7 @@
                 ],
                 files: [],
                 tableData: [],
+                articleData:[]
             }
         },
         components: {
@@ -130,6 +92,7 @@
         },
         created() {
             this.load()
+            this.loadArticle()
         },
         methods: {
             load() {
@@ -144,6 +107,20 @@
                     // console.log("#######################################")
                     this.tableData = res.records
                 })
+            },
+            loadArticle() {
+                this.request.get("/article/pages", {
+                    params: {
+                        pageNum: 1,
+                        pageSize: 12,
+                        position: "passage"
+                    }
+                }).then(res => {
+                    console.log("-----------------------------------")
+                    console.log(res)
+                    this.articleData = res.data.records
+                })
+
             },
         }
     }

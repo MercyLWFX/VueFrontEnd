@@ -9,18 +9,11 @@
                 <el-menu-item index="/front/home">首页</el-menu-item>
                 <el-menu-item index="/front/video">视频播放</el-menu-item>
                 <el-menu-item index="/front/article">文章列表</el-menu-item>
-                <el-menu-item index="/front/social">共享社区</el-menu-item>
+                <el-menu-item index="/front/socialDetail">共享社区</el-menu-item>
                 <el-submenu index="2">
                     <template slot="title">我的工作台</template>
-                    <el-menu-item index="/front/item1">选项1</el-menu-item>
-                    <el-menu-item index="2-2">选项2</el-menu-item>
-                    <el-menu-item index="2-3">选项3</el-menu-item>
-                    <el-submenu index="2-4">
-                        <template slot="title">选项4</template>
-                        <el-menu-item index="2-4-1">选项1</el-menu-item>
-                        <el-menu-item index="2-4-2">选项2</el-menu-item>
-                        <el-menu-item index="2-4-3">选项3</el-menu-item>
-                    </el-submenu>
+                    <el-menu-item index="/">个人中心</el-menu-item>
+                    <el-menu-item index="/CommArticles">社区发帖</el-menu-item>
                 </el-submenu>
                 <el-menu-item index="/front/sign">已报名</el-menu-item>
                 <el-menu-item index="/front/cart">预报名管理</el-menu-item>

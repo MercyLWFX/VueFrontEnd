@@ -108,6 +108,16 @@ const routes = [
                 name: 'ArticleDetail',
                 component: () => import('../views/front/ArticleDetail')
             },
+            {
+                path: 'socialDetail',
+                name: 'SocialDetail',
+                component: () => import('../views/front/SocialArticle')
+            },
+            {
+                path: 'score',
+                name: 'Score',
+                component: () => import('../views/front/Score')
+            },
 
         ]
     }

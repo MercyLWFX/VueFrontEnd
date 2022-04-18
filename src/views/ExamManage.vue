@@ -103,6 +103,9 @@
                 <el-form-item label="比赛地址" prop="address">
                     <el-input v-model="form.address"></el-input>
                 </el-form-item>
+                <el-form-item label="报名费用" prop="expense">
+                    <el-input v-model="form.expense"></el-input>
+                </el-form-item>
                 <el-form-item label="报名时间" required>
                     <el-col :span="11">
                         <el-form-item prop="date1">
@@ -202,7 +205,8 @@
                     imgurl:null,
                     detail:null,
                     address:null,
-                    userId:null
+                    userId:null,
+                    expense:null
                 },
                 headerBg: 'headerBg',
                 category:{},
@@ -252,7 +256,7 @@
                     .catch(_ => {});
             },
             load() {
-                this.request.get("/competition/page", {
+                this.request.get("/competition/pages", {
                     params: {
                         pageNum: this.pageNum,
                         pageSize: this.pageSize,

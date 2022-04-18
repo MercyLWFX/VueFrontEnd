@@ -113,7 +113,6 @@
                     params: {
                         pageNum: this.pageNum,
                         pageSize: this.pageSize,
-                        // ascription: this.ascription
                         types: this.types
                     }
                 }).then(res => {
@@ -121,7 +120,7 @@
                     // console.log(res)
                     this.tableData = res.data.records
                     this.total = res.total
-                    console.log(this.total)
+                    // console.log(this.total)
                 })
             },
             handleSizeChange(pageSize) {

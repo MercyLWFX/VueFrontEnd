@@ -7,6 +7,9 @@
             <el-form-item label="比赛地址" prop="address">
                 <el-input v-model="ruleForm.address"></el-input>
             </el-form-item>
+            <el-form-item label="报名费用" prop="expense">
+                <el-input v-model="ruleForm.address"></el-input>
+            </el-form-item>
             <el-form-item label="比赛时间" required>
                 <div class="block">
 <!--                    <p>组件值：{{ ruleForm.stat }}{{ ruleForm.end }}</p>-->

@@ -111,7 +111,7 @@
     import axios from "axios";
 
     export default {
-        name: "Article",
+        name: "SocialArticle",
         data() {
             return {
                 form: {},
@@ -158,7 +158,7 @@
                         pageNum: this.pageNum,
                         pageSize: this.pageSize,
                         name: this.name,
-                        position: "passage"
+                        position: "social"
                     }
                 }).then(res => {
 

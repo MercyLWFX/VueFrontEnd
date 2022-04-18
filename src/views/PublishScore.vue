@@ -10,33 +10,13 @@
                     type="selection"
                     width="55">
             </el-table-column>
-            <el-table-column prop="id" sortable label="id" width="60">
+            <el-table-column prop="id" sortable label="id" width="350">
             </el-table-column>
-            <el-table-column prop="name" label="比赛名称" width="140">
+            <el-table-column prop="name" label="比赛名称" width="640">
             </el-table-column>
-            <el-table-column prop="detail" label="详情信息">
+            <el-table-column  label="操作">
                 <template slot-scope="scope">
-                    <el-button @click="checkDetail(scope.row.detail)">点击查看详情</el-button>
-                </template>
-            </el-table-column>
-            <el-table-column prop="address" label="比赛地址" >
-            </el-table-column>
-            <el-table-column label="操作" width="200" align="center">
-                <template slot-scope="scope">
-                    <el-button type="success" @click="handleEdit(scope.row)">编辑 <i class="el-icon-edit"></i>
-                    </el-button>
-                    <el-popconfirm
-                            class="ml-5"
-                            confirm-button-text='确定吗'
-                            cancel-button-text='再想想'
-                            icon="el-icon-info"
-                            icon-color="red"
-                            title="您确定删除吗？"
-                            @confirm="del(scope.row.id)"
-                    >
-                        <el-button type="danger" slot="reference">删除 <i class="el-icon-remove-outline"></i>
-                        </el-button>
-                    </el-popconfirm>
+                    <el-button @click="publish(scope.row.id)">公布竞赛成绩</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -51,6 +31,24 @@
                     :total="total">
             </el-pagination>
         </div>
+
+        <el-dialog title="参赛成员" :visible.sync="vis" width="30%">
+            <el-table :data="userInfo" border stripe>
+                <el-table-column prop="avatarUrl" label="头像" width="80">
+                    <template slot-scope="scope">
+                        <el-avatar size="medium" :src="scope.row.avatarUrl"></el-avatar>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="username" label="用户名">
+                </el-table-column>
+                <el-table-column label="成绩">
+                    <template slot-scope="scope">
+                        <el-input placeholder="请输入内容" v-model="scope.row.score" ></el-input>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <el-button @click="pushScore()">提交</el-button>
+        </el-dialog>
     </div>
 </template>
 
@@ -60,6 +58,8 @@
         data() {
             return {
                 tableData: [],
+                score:null,
+                examId:null,
                 total: 0,
                 pageNum: 1,
                 pageSize: 5,
@@ -67,6 +67,7 @@
                 dialogFormVisible: false,
                 multipleSelection: [],
                 drawer: false,
+                vis: false,
                 direction: 'rtl',
                 form: {
                     id: null,
@@ -106,16 +107,47 @@
                     detail: [
                         { required: true, message: '请填写详情信息', trigger: 'blur' }
                     ]
-                }
+                },
+                userInfo:[]
             }
         },
         created() {
             this.load()
         },
         methods: {
-            checkDetail(val){
-              this.detail=val
-                this.drawer=true
+
+            pushScore(){
+                this.userInfo.examId=this.examId
+                this.userInfo.forEach((e)=>{
+                    e.examId=this.examId
+                })
+                // console.log(this.userInfo)
+                this.request.post("/sign/scores",this.userInfo).then(res => {
+                   if (res.code==='200'){
+                       this.$message.success("提交成功")
+                       this.vis=false
+                   }else {
+                       this.$message.error("系统错误，请稍后再试")
+                   }
+                })
+
+            },
+            publish(val){
+                this.examId=val
+                this.request.get("/sign/publish", {
+                    params: {
+                        examId: val
+                    }
+                }).then(res => {
+                    if (res.data.length!=0){
+                        this.userInfo=res.data[0].competitions
+
+                    }else {
+                        this.$message.error("暂未有有人参加本次竞赛，请稍后重试")
+                    }
+                    this.vis=true
+                    console.log(this.userInfo)
+                })
             },
             handleAvatarSuccess(res) {
                 this.form.imgurl = res
@@ -128,7 +160,7 @@
                     .catch(_ => {});
             },
             load() {
-                this.request.get("/competition/page", {
+                this.request.get("/competition/pages", {
                     params: {
                         pageNum: this.pageNum,
                         pageSize: this.pageSize,
