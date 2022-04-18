@@ -2,35 +2,35 @@
     <div>
 
         <el-row :gutter="10" style="margin-bottom: 60px">
-            <el-col :span="6">
+            <el-col :span="8">
                 <el-card style="color: #409EFF">
                     <div><i class="el-icon-user-solid"/> 用户总数</div>
                     <div style="padding: 10px 0; text-align: center; font-weight: bold">
-                        100
+                        {{ userCount }}
                     </div>
                 </el-card>
             </el-col>
-            <el-col :span="6">
-                <el-card style="color: #F56C6C">
-                    <div><i class="el-icon-money"/> 销售总量</div>
-                    <div style="padding: 10px 0; text-align: center; font-weight: bold">
-                        ￥ 1000000
-                    </div>
-                </el-card>
-            </el-col>
-            <el-col :span="6">
+<!--            <el-col :span="6">-->
+<!--                <el-card style="color: #F56C6C">-->
+<!--                    <div><i class="el-icon-money"/> 销售总量</div>-->
+<!--                    <div style="padding: 10px 0; text-align: center; font-weight: bold">-->
+<!--                        ￥ 1000000-->
+<!--                    </div>-->
+<!--                </el-card>-->
+<!--            </el-col>-->
+            <el-col :span="8">
                 <el-card style="color: #67C23A">
-                    <div><i class="el-icon-bank-card"/> 收益总额</div>
+                    <div><i class="el-icon-bank-card"/> 职业资格证书总数</div>
                     <div style="padding: 10px 0; text-align: center; font-weight: bold">
-                        ￥ 300000
+                        {{examCount}}
                     </div>
                 </el-card>
             </el-col>
-            <el-col :span="6">
+            <el-col :span="8">
                 <el-card style="color: #E6A23C">
-                    <div><i class="el-icon-s-shop"/> 门店总数</div>
+                    <div><i class="el-icon-s-shop"/> 竞赛信息总数</div>
                     <div style="padding: 10px 0; text-align: center; font-weight: bold">
-                        20
+                        {{competitionCount}}
                     </div>
                 </el-card>
             </el-col>
@@ -54,6 +54,33 @@
 
     export default {
         name: "Home",
+        data() {
+            return {
+                userCount: null,
+                examCount: null,
+                competitionCount: null
+            }
+        },
+        created() {
+            this.request.get("/echarts/userCount").then(res => {
+                if (res.code === '200') {
+                    console.log(res)
+                    this.userCount = res.data
+                }
+            })
+            this.request.get("/echarts/examCount").then(res => {
+                if (res.code === '200') {
+                    console.log(res)
+                    this.examCount = res.data
+                }
+            })
+            this.request.get("/echarts/competitionCount").then(res => {
+                if (res.code === '200') {
+                    console.log(res)
+                    this.competitionCount = res.data
+                }
+            })
+        },
         mounted() {
             var option = {
                 title: {

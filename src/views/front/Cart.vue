@@ -65,7 +65,7 @@
                     <el-button @click="toggleSelection()">取消选择</el-button>
                 </div>
                 <div class="option">
-                    <el-button type="warning" @click="delBatch">删除选中的商品</el-button>
+                    <el-button type="warning" @click="delBatch">删除选中的报名</el-button>
                 </div>
                 <div class="option">
                     <el-button type="warning" @click="change">点击切换资格证或竞赛预报名</el-button>
@@ -188,25 +188,41 @@
                 }
             },
             payOne(id,total){
-                console.log(id)
-                console.log(total)
-                this.$router.push({
-                    name:'Pay',
-                    params:{
-                        examId:id,
-                        total:total
+                // console.log(id)
+                // console.log(total)
+                this.request.get("/form/"+ this.user.id).then(res => {
+                    if (res.data === null) {
+                        this.$message.success("请先填写报名基本信息")
+                        this.$router.push("/form")
+                    } else {
+                        this.$router.push({
+                            name:'Pay',
+                            params:{
+                                examId:id,
+                                total:total
+                            }
+                        })
                     }
                 })
+
             },
             sumTotal(){
                 // console.log(this.multipleSelection.map(v => v.id))
-                this.$router.push({
-                    name:'Pay',
-                    params:{
-                        examId:this.multipleSelection.map(v => v.id),
-                        total:this.total,
+                this.request.get("/form/"+ this.user.id).then(res => {
+                    if (res.data === null) {
+                        this.$message.success("请先填写报名基本信息")
+                        this.$router.push("/form")
+                    } else {
+                        this.$router.push({
+                            name:'Pay',
+                            params:{
+                                examId:this.multipleSelection.map(v => v.id),
+                                total:this.total,
+                            }
+                        })
                     }
                 })
+
             },
             change(){
                 this.flag=!this.flag

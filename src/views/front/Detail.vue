@@ -120,29 +120,15 @@
 
             },
             payOrder() {
-                this.request.get("/sign/check/" + this.tableData.id).then(res => {
-                    if (res.code === '200') {
-                        if (res.data != null) {
-                            //如果data不为空的情况，说明已经加入了预报名，无需在要求后台创建关系表，直接跳转到支付界面
-                            this.$router.push({
-                                name: 'Pay',
-                                params: {
-                                    examId: this.tableData.id,
-                                    total: this.tableData.expense
-                                }
-                            })
-                        } else {
-                            //如果data为空，说明还没有加入预报名，所以要想后台请求创建关系表，在跳转到支付界面
-                            this.request.get("/sign/pre", {
-                                params: {
-                                    userId: this.user,
-                                    examId: this.tableData.id,
-                                    ispay: 0
-                                }
-                            }).then(res => {
-                                if (res.code === '200') {
-
-                                    this.$message.success("成功加入预报名,正在跳转支付界面")
+                this.request.get("/form/"+ this.user).then(res => {
+                    if (res.data === null) {
+                        this.$message.success("请先填写报名基本信息")
+                        this.$router.push("/form")
+                    } else {
+                        this.request.get("/sign/check/" + this.tableData.id).then(res => {
+                            if (res.code === '200') {
+                                if (res.data != null) {
+                                    //如果data不为空的情况，说明已经加入了预报名，无需在要求后台创建关系表，直接跳转到支付界面
                                     this.$router.push({
                                         name: 'Pay',
                                         params: {
@@ -151,15 +137,37 @@
                                         }
                                     })
                                 } else {
-                                    this.$message.error(res.msg)
-                                }
-                            })
-                        }
+                                    //如果data为空，说明还没有加入预报名，所以要想后台请求创建关系表，在跳转到支付界面
+                                    this.request.get("/sign/pre", {
+                                        params: {
+                                            userId: this.user,
+                                            examId: this.tableData.id,
+                                            ispay: 0
+                                        }
+                                    }).then(res => {
+                                        if (res.code === '200') {
 
-                    } else {
-                        this.$message.error(res.msg)
+                                            this.$message.success("成功加入预报名,正在跳转支付界面")
+                                            this.$router.push({
+                                                name: 'Pay',
+                                                params: {
+                                                    examId: this.tableData.id,
+                                                    total: this.tableData.expense
+                                                }
+                                            })
+                                        } else {
+                                            this.$message.error(res.msg)
+                                        }
+                                    })
+                                }
+
+                            } else {
+                                this.$message.error(res.msg)
+                            }
+                        })
                     }
                 })
+
 
             }
         }

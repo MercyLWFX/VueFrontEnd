@@ -40,7 +40,7 @@
                 </template>
             </el-table-column>
         </el-table>
-        <el-button type="danger" style="position: relative;left: 700px" size="big" @click="change">点击切换已报资格证或竞赛
+        <el-button type="danger" v-show="false" style="position: relative;left: 700px" size="big" @click="change">点击切换已报资格证或竞赛
         </el-button>
     </div>
 </template>
@@ -66,16 +66,30 @@
                     this.$router.push("/login")
                     this.$message.error("请登录")
                 } else {
-                    this.request.get("/sign/dopay", {
+                    // this.request.get("/sign/dopay", {
+                    //     params: {
+                    //         userId: this.user.id,
+                    //     }
+                    // }).then(res => {
+                    //     // console.log(res.data[0])
+                    //     if (res.code === '200') {
+                    //         console.log("****************************************")
+                    //         console.log(res)
+                    //         this.tableData = res.data[0].exams
+                    //     }
+                    // })
+                    this.request.get("/sign/payCompetition", {
                         params: {
                             userId: this.user.id,
                         }
                     }).then(res => {
-                        // console.log(res.data[0])
+                        console.log(res)
                         if (res.code === '200') {
-                            console.log("****************************************")
-                            console.log(res)
-                            this.tableData = res.data[0].exams
+                            this.tableData = res.data[0].competitions
+                            console.log(this.tableData)
+                            this.tableData.forEach((val)=>{
+                                val.examName=val.name
+                            })
                         }
                     })
                 }

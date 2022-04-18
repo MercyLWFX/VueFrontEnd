@@ -16,7 +16,8 @@
             </el-table-column>
             <el-table-column  label="操作">
                 <template slot-scope="scope">
-                    <el-button @click="publish(scope.row.id)">公布竞赛成绩</el-button>
+                    <el-button type="primary" @click="publish(scope.row.id)">公布竞赛成绩</el-button>
+                    <el-button type="danger"  @click="statistics(scope.row.id)">成绩统计</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -32,7 +33,7 @@
             </el-pagination>
         </div>
 
-        <el-dialog title="参赛成员" :visible.sync="vis" width="30%">
+        <el-dialog title="参赛成员" :visible.sync="vis" width="40%">
             <el-table :data="userInfo" border stripe>
                 <el-table-column prop="avatarUrl" label="头像" width="80">
                     <template slot-scope="scope">
@@ -46,8 +47,76 @@
                         <el-input placeholder="请输入内容" v-model="scope.row.score" ></el-input>
                     </template>
                 </el-table-column>
+                <el-table-column label="操作">
+                    <template slot-scope="scope">
+                        <el-button @click="showInfo(scope.row.id)">查看参赛人员信息</el-button>
+                    </template>
+                </el-table-column>
             </el-table>
-            <el-button @click="pushScore()">提交</el-button>
+            <el-button type="danger" @click="pushScore()">提交</el-button>
+        </el-dialog>
+        <el-dialog title="成绩统计" :visible.sync="viss" width="30%">
+            平均分<el-input  disabled v-model="scoreInfo.avg" ></el-input>
+            最高分<el-input  disabled v-model="scoreInfo.max" ></el-input>
+            最低分<el-input  disabled v-model="scoreInfo.min" ></el-input>
+        </el-dialog>
+        <el-dialog title="基本信息" :visible.sync="visss" width="70%">
+            <el-card style="width: 800px;min-height:630px;margin: 0 auto;">
+                <el-form :model="ruleForm" ref="ruleForm"  label-width="100px" class="demo-ruleForm">
+                    <el-form-item label="姓名" prop="name">
+                        <el-input disabled v-model="ruleForm.name"></el-input>
+                    </el-form-item>
+                    <el-form-item label="民族" prop="nation">
+                        <el-input disabled v-model="ruleForm.nation"></el-input>
+                    </el-form-item>
+                    <el-form-item label="性别">
+                        <el-input disabled v-model="ruleForm.sex"></el-input>
+                    </el-form-item>
+                    <el-form-item label="出生年月日">
+                        <el-input disabled v-model="ruleForm.birthday"></el-input>
+                    </el-form-item>
+                    <el-form-item label="身份证号" prop="idcard">
+                        <el-input disabled v-model="ruleForm.idcard"></el-input>
+                    </el-form-item>
+                    <el-form-item label="通讯地址" prop="address">
+                        <el-input disabled v-model="ruleForm.address"></el-input>
+                    </el-form-item>
+                    <el-form-item label="邮编" prop="postCode">
+                        <el-input disabled v-model="ruleForm.postCode"></el-input>
+                    </el-form-item>
+                    <el-form-item label="手机号" prop="phone" >
+                        <el-input disabled v-model="ruleForm.phone"></el-input>
+                    </el-form-item>
+                    <el-form-item  label="电子邮件" prop="email" >
+                        <el-input disabled v-model="ruleForm.email"></el-input>
+                    </el-form-item>
+                    <el-form-item label="在读学校" prop="school">
+                        <el-input disabled v-model="ruleForm.school"></el-input>
+                    </el-form-item>
+                    <el-form-item label="学位层次" prop="educationalLevel">
+                        <el-input disabled v-model="ruleForm.educationalLevel"></el-input>
+                    </el-form-item>
+                    <el-form-item label="毕业院校" prop="graduated">
+                        <el-input disabled v-model="ruleForm.graduated"></el-input>
+                    </el-form-item>
+                    <el-form-item label="毕业时间">
+                        <el-input disabled v-model="ruleForm.graduatedDate"></el-input>
+                    </el-form-item>
+                    <el-form-item label="专业" prop="major">
+                        <el-input disabled v-model="ruleForm.major" ></el-input>
+                    </el-form-item>
+                    <el-form-item label="工作单位名称" prop="workplace">
+                        <el-input disabled v-model="ruleForm.workplace" placeholder="没有请填无"></el-input>
+                    </el-form-item>
+                    <el-form-item label="工作单位地址" prop="workAddress">
+                        <el-input disabled v-model="ruleForm.workAddress" placeholder="没有请填无"></el-input>
+                    </el-form-item>
+                    <el-form-item label="职务" prop="job">
+                        <el-input disabled v-model="ruleForm.job" placeholder="没有请填无"></el-input>
+                    </el-form-item>
+                    <el-button @click="visss=false">关闭</el-button>
+                </el-form>
+            </el-card>
         </el-dialog>
     </div>
 </template>
@@ -68,6 +137,13 @@
                 multipleSelection: [],
                 drawer: false,
                 vis: false,
+                viss:false,
+                visss:false,
+                scoreInfo:{
+                    avg:null,
+                    min:null,
+                    max:null
+                },
                 direction: 'rtl',
                 form: {
                     id: null,
@@ -108,13 +184,40 @@
                         { required: true, message: '请填写详情信息', trigger: 'blur' }
                     ]
                 },
-                userInfo:[]
+                userInfo:[],
+                ruleForm:{}
             }
         },
         created() {
             this.load()
         },
         methods: {
+            statistics(val){
+
+                this.request.get("/sign/statistics",{
+                    params:{
+                        examId: val
+                    }
+                }).then(res=>{
+                    if (res.code==="200"){
+                        // console.log(res.data)
+                        this.scoreInfo=res.data
+                        console.log(this.scoreInfo)
+                        this.viss=true
+                    }
+                })
+            },
+            showInfo(id){
+                this.request.get("/form/"+ id).then(res => {
+                    if (res.code === '200') {
+                        console.log(res)
+                        this.ruleForm=res.data
+                        this.visss=true
+                    } else {
+                        this.$message.error(res.msg)
+                    }
+                })
+            },
 
             pushScore(){
                 this.userInfo.examId=this.examId
@@ -130,6 +233,7 @@
                        this.$message.error("系统错误，请稍后再试")
                    }
                 })
+                this.userInfo=[]
 
             },
             publish(val){
@@ -139,14 +243,17 @@
                         examId: val
                     }
                 }).then(res => {
+                    console.log(11111111111111111111111111111111111111111111111111111111)
+                    console.log(res)
                     if (res.data.length!=0){
                         this.userInfo=res.data[0].competitions
-
+                        this.vis=true
                     }else {
                         this.$message.error("暂未有有人参加本次竞赛，请稍后重试")
+                        this.vis=false
                     }
-                    this.vis=true
-                    console.log(this.userInfo)
+
+                    // console.log(this.userInfo)
                 })
             },
             handleAvatarSuccess(res) {

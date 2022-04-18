@@ -1,6 +1,6 @@
 <template>
-    <el-container style="min-height: 100vh">
-
+    <el-container style="height: 100vh">
+<!--style="max-height: 100vh"-->
         <el-aside :width="sideWidth + 'px'" style="box-shadow: 2px 0 6px rgb(0 21 41 / 35%);">
             <Asides :isCollapse="isCollapse" :logoTextShow="logoTextShow"  />
         </el-aside>
@@ -68,3 +68,11 @@
         }
     }
 </script>
+
+<style >
+    .el-main {
+        overflow-y: visible;
+        /*overflow: hidden;*/
+        /*overflow-y: hidden;*/
+    }
+</style>
