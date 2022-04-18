@@ -1,14 +1,6 @@
 <template>
     <div>
         <div style="margin: 10px 0">
-            <el-input style="width: 200px" placeholder="请输入名称" suffix-icon="el-icon-search" v-model="name"></el-input>
-            <el-button class="ml-5" type="primary" @click="load">搜索</el-button>
-            <el-button type="warning" @click="reset">重置</el-button>
-        </div>
-        <div style="margin: 10px 0">
-            <el-upload action="http://localhost:8080/file/upload" :headers="myHeaders" :show-file-list="false" :on-success="handleFileUploadSuccess" style="display: inline-block">
-                <el-button type="primary" class="ml-5">上传文件 <i class="el-icon-top"></i></el-button>
-            </el-upload>
             <el-popconfirm
                     class="ml-5"
                     confirm-button-text='确定'
@@ -24,19 +16,30 @@
         </div>
         <el-table :data="tableData" border stripe :header-cell-class-name="'headerBg'" max-height="480px"  @selection-change="handleSelectionChange">
             <el-table-column type="selection" width="55"></el-table-column>
-            <el-table-column prop="id" label="ID" width="80"></el-table-column>
-            <el-table-column prop="filename" label="文件名称"></el-table-column>
-            <el-table-column prop="type" label="文件类型"></el-table-column>
-            <el-table-column prop="size" label="文件大小(kb)"></el-table-column>
-            <el-table-column prop="userid" label="文件上传者"></el-table-column>
-            <el-table-column label="下载">
+            <el-table-column prop="userId" label="申请人ID" width="80"></el-table-column>
+            <el-table-column label="企业法人营业执照">
                 <template slot-scope="scope">
-                    <el-button type="primary" @click="download(scope.row.url)">下载</el-button>
+                    <el-button type="primary" @click="preview(scope.row.businessLicence)">预览</el-button>
                 </template>
             </el-table-column>
-            <el-table-column label="启用">
+            <el-table-column label="企业认证公函">
                 <template slot-scope="scope">
-                    <el-switch v-model="scope.row.enable" active-color="#13ce66" inactive-color="#ccc" @change="changeEnable(scope.row)"></el-switch>
+                    <el-button type="primary" @click="preview(scope.row.certificationLetter)">预览</el-button>
+                </template>
+            </el-table-column>
+            <el-table-column label="商标注册证">
+                <template slot-scope="scope">
+                    <el-button type="primary" @click="preview(scope.row.registrationCertificate)">预览</el-button>
+                </template>
+            </el-table-column>
+            <el-table-column label="税务登记证">
+                <template slot-scope="scope">
+                    <el-button type="primary" @click="preview(scope.row.taxCertificate)">预览</el-button>
+                </template>
+            </el-table-column>
+            <el-table-column label="是否同意">
+                <template slot-scope="scope">
+                    <el-switch v-model="scope.row.agree" active-color="#13ce66" inactive-color="#ccc" @change="changeEnable(scope.row)"></el-switch>
                 </template>
             </el-table-column>
             <el-table-column label="操作"  width="200" align="center">
@@ -72,7 +75,7 @@
 
 <script>
     export default {
-        name: "File",
+        name: "EnterpriseCertification",
         data() {
             return {
                 tableData: [],
@@ -89,11 +92,10 @@
         },
         methods: {
             load() {
-                this.request.get("/file/page", {
+                this.request.get("/certify/page", {
                     params: {
                         pageNum: this.pageNum,
                         pageSize: this.pageSize,
-                        name: this.name,
                     }
                 }).then(res => {
 
@@ -104,14 +106,15 @@
                 })
             },
             changeEnable(row) {
-                this.request.post("/file/update", row).then(res => {
+                console.log(row)
+                this.request.post("/certify/update", row).then(res => {
                     if (res.code === '200') {
                         this.$message.success("操作成功")
                     }
                 })
             },
             del(id) {
-                this.request.delete("/file/" + id).then(res => {
+                this.request.delete("/certify/" + id).then(res => {
                     if (res.code === '200') {
                         this.$message.success("删除成功")
                         this.load()
@@ -126,7 +129,7 @@
             },
             delBatch() {
                 let ids = this.multipleSelection.map(v => v.id)  // [{}, {}, {}] => [1,2,3]
-                this.request.post("/file/del/batch", ids).then(res => {
+                this.request.post("/certify/del/batch", ids).then(res => {
                     if (res.code === '200') {
                         this.$message.success("批量删除成功")
                         this.load()
@@ -153,9 +156,9 @@
                 console.log(res)
                 this.load()
             },
-            download(url) {
-                window.open(url)
-            }
+            preview(url) {
+                window.open('https://file.keking.cn/onlinePreview?url=' + encodeURIComponent(window.btoa((url))))
+            },
         }
     }
 </script>

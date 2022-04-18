@@ -13,6 +13,7 @@
 
         </div>
 
+
         <div v-for="item in menus" :key="item.id">
             <div v-if="item.path">
                 <el-menu-item :index="item.path">
@@ -35,6 +36,10 @@
                 </el-submenu>
             </div>
         </div>
+        <el-menu-item index="/front/home">
+            <!--            <i :class="item.icon"></i>-->
+            <span slot="title">回到展示页</span>
+        </el-menu-item>
 
 <!--        <el-menu-item index="/">
             <template slot="title">

@@ -118,6 +118,11 @@ const routes = [
                 name: 'Score',
                 component: () => import('../views/front/Score')
             },
+            {
+                path: 'certify',
+                name: 'Certify',
+                component: () => import('../views/front/Certify')
+            },
 
         ]
     }

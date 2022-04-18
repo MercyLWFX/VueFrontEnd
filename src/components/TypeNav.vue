@@ -38,7 +38,7 @@
 <!--                <a href="###">正在报名</a>-->
                 <router-link to="/front/score">结果揭晓</router-link>
 <!--                <a href="###">优秀参与者</a>-->
-                <a href="###">成为竞赛发布者</a>
+                <router-link to="/front/certify">成为竞赛发布者</router-link>
                 <a href="###">关于本站</a>
             </nav>
 <!--            <div @mouseleave="leaveIndex" @mouseenter="enterShow">

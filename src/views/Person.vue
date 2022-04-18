@@ -294,6 +294,7 @@
                                     this.getUser().then(res => {
                                         res.token = JSON.parse(localStorage.getItem("user")).token
                                         localStorage.setItem("user", JSON.stringify(res))
+
                                     })
                                     setTimeout(() => {
                                         _this.dialogVisible = false;

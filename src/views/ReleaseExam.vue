@@ -8,7 +8,7 @@
                 <el-input v-model="ruleForm.address"></el-input>
             </el-form-item>
             <el-form-item label="报名费用" prop="expense">
-                <el-input v-model="ruleForm.address"></el-input>
+                <el-input v-model="ruleForm.expense"></el-input>
             </el-form-item>
             <el-form-item label="比赛时间" required>
                 <div class="block">

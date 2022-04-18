@@ -10,7 +10,9 @@
         <el-carousel height="540px" style="width: 780px;margin: 0 auto; position: relative;top: -80px"
                      :interval="10000">
             <el-carousel-item v-for="item in imgs" :key="item">
-                <img :src="item" alt="" style="width: 100%;height: 540px">
+                <router-link :to="`/front/detail/${item.name}`">
+                    <img :src="item.img" alt="" style="width: 100%;height: 540px">
+                </router-link>
             </el-carousel-item>
         </el-carousel>
         <div class="right">
@@ -76,9 +78,9 @@
         data() {
             return {
                 imgs: [
-                    require('../../assets/banner2.png'),
-                    require('../../assets/banner3.png'),
-                    require('../../assets/banner4.png'),
+                    {img:require('../../assets/banner2.png'),name:"教师资格"},
+                    {img:require('../../assets/banner3.png'),name:"普通话水平测试"},
+                    {img:require('../../assets/banner4.png'),name:"法律职业资格"}
                 ],
                 files: [],
                 tableData: [],
