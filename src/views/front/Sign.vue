@@ -24,7 +24,7 @@
             <el-table-column
                     prop="examName"
                     label="报考名称"
-                    width="280">
+                    width="180">
             </el-table-column>
 
             <el-table-column
@@ -34,6 +34,19 @@
             >
             </el-table-column>
             <el-table-column
+
+                    label="报名状态"
+                    width="80"
+            >
+                已报名
+            </el-table-column>
+            <el-table-column
+                    prop="end"
+                    label="开始时间"
+                    show-overflow-tooltip
+            >
+            </el-table-column>
+<!--            <el-table-column
                     label="操作"
                     show-overflow-tooltip>
                 <template slot-scope="scope">
@@ -51,7 +64,7 @@
                         </el-button>
                     </el-popconfirm>
                 </template>
-            </el-table-column>
+            </el-table-column>-->
         </el-table>
     </div>
 </template>
@@ -77,7 +90,7 @@
                     this.$router.push("/login")
                     this.$message.error("请登录")
                 }else {
-                    this.request.get("/sign/prepay",{
+                    this.request.get("/sign/dopay",{
                         params: {
                             userId: this.user.id,
                         }

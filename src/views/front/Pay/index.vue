@@ -23,10 +23,9 @@
                 <h4>重要说明：</h4>
                 <ol>
                     <li>
-                        平台目前支持<span class="zfb">支付宝</span>支付方式。
+                        平台目前支持<span class="zfb">账户余额</span>支付方式。
                     </li>
                     <li>其它支付渠道正在调试中，敬请期待。</li>
-                    <li>为了保证您的支付流程顺利完成，请保存以下支付宝信息。</li>
                 </ol>
                 <h4>
                     支付宝账户信息：（很重要，<span class="save">请保存！！！</span>）
@@ -91,11 +90,11 @@
         name: "Pay",
         data() {
             return {
-                payInfo: this.$route.query.total,
+                payInfo: this.$route.params.total,
                 timer: null,
-                //支付状态码
                 code: "",
-                user: localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : {}
+                user: localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : {},
+                examId: this.$route.params.examId
             };
         },
         methods: {
@@ -106,8 +105,10 @@
                 if (this.payInfo > this.user.money) {
                     this.$message.error("您的账户余额不足，请去个人中心进行充值")
                 } else {
+                    console.log(this.examId.length)
                     this.user.money = this.user.money - this.payInfo
                     console.log(this.user)
+                    //扣费成=成功后，先向后台发送请求修改余额
                     this.request.post("/user/pay", this.user).then(res => {
                         if (res.code === '200') {
                             this.getUser().then(res => {
@@ -115,11 +116,29 @@
                                 localStorage.setItem("user", JSON.stringify(res))
                             })
                         }
-                        this.$router.push("/front/paySuccess")
-                        console.log("已执行")
                     })
-
-
+                    //修改余额过后，将未付修改为已付账单
+                    if (this.examId.length>0){
+                        let ids=this.examId
+                        this.request.post("/sign/changeList",ids).then(res => {
+                            if (res.code === '200') {
+                               this.$message.success("支付成功")
+                            }
+                        })
+                    }else {
+                        this.request.get("/sign/changeOne",{
+                            params:{
+                                examId:this.examId
+                            }
+                        }).then(res => {
+                            if (res.code === '200') {
+                                this.$message.success("支付成功")
+                            }
+                        })
+                    }
+                    setTimeout(()=>{
+                        this.$router.push("/front/paySuccess")
+                    },2000)
                 }
             }
         }

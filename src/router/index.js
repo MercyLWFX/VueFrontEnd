@@ -76,7 +76,7 @@ const routes = [
                 component: () => import('../views/front/Sign.vue'),
             },
             {
-                path: 'pay',
+                path: 'pay/:examId/:total',
                 name: 'Pay',
                 component: Pay,
             },
