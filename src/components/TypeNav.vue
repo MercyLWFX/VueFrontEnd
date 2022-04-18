@@ -34,29 +34,6 @@
             </div>
             <nav class="nav">
                 <router-link class="demonstration" to="/front/competition">竞赛信息</router-link>
-                <!--                <div class="subnav">
-                                    <ul>
-                                        <li><a href="http://www.52jingsai.com/bisai/shangyechuangye/chuangye/">创业大赛</a></li>
-                                        <li><a href="http://www.52jingsai.com/bisai/shangyechuangye/yxch/">营销策划</a></li>
-                                        <li><a href="http://www.52jingsai.com/bisai/shangyechuangye/jinrong/">金融比赛</a></li>
-                                        <li><a href="http://www.52jingsai.com/bisai/gggy/guanggao/">广告创意</a></li>
-                                        <li><a href="http://www.52jingsai.com/bisai/keji/sheji/">设计比赛</a></li>
-                                        <li><a href="http://www.52jingsai.com/bisai/keji/kfyy/">IT应用开发</a></li>
-                                        <li><a href="http://www.52jingsai.com/bisai/yishuaihao/yjwx/">文学演讲</a></li>
-                                        <li><a href="http://www.52jingsai.com/bisai/yishuaihao/byzc/">播音主持</a></li>
-                                        <li><a href="http://www.52jingsai.com/bisai/yishuaihao/dmsh/">动漫书画</a></li>
-                                        <li><a href="http://www.52jingsai.com/bisai/yishuaihao/yssy/">影视摄影</a></li>
-                                        <li><a href="http://www.52jingsai.com/bisai/xkjn/xkxs/">学科学术</a></li>
-                                        <li><a href="http://www.52jingsai.com/bisai/keji/keji/">科技大赛</a></li>
-                                        <li><a href="http://www.52jingsai.com/bisai/gggy/gongyi/">公益大赛</a></li>
-                                        <li><a href="http://www.52jingsai.com/bisai/yishuaihao/wdws/">舞蹈武术</a></li>
-                                        <li><a href="http://www.52jingsai.com/bisai/yishuaihao/mote/">模特大赛</a></li>
-                                        <li><a href="http://www.52jingsai.com/bisai/xkjn/tiyu/">体育竞技</a></li>
-                                        <li><a href="http://www.52jingsai.com/bisai/yishuaihao/xxgc/">选秀歌唱</a></li>
-                                        <li><a href="http://www.52jingsai.com/bisai/xkjn/youxi/">游戏竞技</a></li>
-                                        <li><a href="http://www.52jingsai.com/bisai/qita/">其他比赛</a></li>
-                                    </ul>
-                                </div>-->
                 <a href="###">即将开始</a>
                 <a href="###">正在报名</a>
                 <a href="###">结果揭晓</a>
@@ -115,6 +92,15 @@
         },
         methods: {
             load() {
+                this.request.get("/classes/all").then(res => {
+                    if (res.code === '200') {
+                        this.tableData = res.data
+                        // console.log("######################*****************")
+                        console.log(res)
+                    }
+                })
+            },
+           /* load() {
                 this.request.get("/classes/pages", {
                     params: {
                         pageNum: 0,
@@ -129,7 +115,7 @@
                     }
 
                 })
-            },
+            },*/
             leaveIndex() {
                 this.currentIndex = -1;
                 if (this.$route.path != '/front/home') {

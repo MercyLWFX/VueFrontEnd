@@ -46,26 +46,6 @@
                     show-overflow-tooltip
             >
             </el-table-column>
-
-            <!--            <el-table-column
-                                label="操作"
-                                show-overflow-tooltip>
-                            <template slot-scope="scope">
-                                <el-button type="primary">支付</el-button>
-                                <el-popconfirm
-                                        class="ml-5"
-                                        confirm-button-text='确定吗'
-                                        cancel-button-text='再想想'
-                                        icon="el-icon-info"
-                                        icon-color="red"
-                                        title="您确定删除吗？"
-                                        @confirm="del(scope.row.id)"
-                                >
-                                    <el-button type="danger" slot="reference">删除 <i class="el-icon-remove-outline"></i>
-                                    </el-button>
-                                </el-popconfirm>
-                            </template>
-                        </el-table-column>-->
         </el-table>
         <el-button type="danger" style="position: relative;left: 700px" size="big" @click="change">点击切换已报资格证或竞赛
         </el-button>
@@ -121,7 +101,6 @@
                     }
                 })
             },
-
             handleSelectionChange(val) {
                 // this.total=0
                 // if (this.multipleSelection){
@@ -175,7 +154,6 @@
                     this.$refs.multipleTable.clearSelection();
                 }
             },
-
             change() {
                 this.flag = !this.flag
                 if (this.flag) {
@@ -185,16 +163,6 @@
                 }
             },
         },
-        // watch: {
-        //     multipleSelection: {
-        //         handler(newVal, oldVal) {
-        //             this.total = 0
-        //             newVal.forEach(row => {
-        //                 this.total += row.expense
-        //             })
-        //         }
-        //     }
-        // }
     };
 
 </script>

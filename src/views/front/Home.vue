@@ -65,7 +65,9 @@
                 </ul>
             </div>
             <div class="ads">
-                <img src="../../assets/recmm.png"/>
+                <router-link to="/front/articleDetail?id=5">
+                    <img src="../../assets/recmm.png"/>
+                </router-link>
             </div>
         </div>
         <div class="cat">
@@ -137,9 +139,9 @@
                         pageSize: 8,
                     }
                 }).then(res => {
-                    console.log("#######################################")
-                    console.log(res)
-                    console.log("#######################################")
+                    // console.log("#######################################")
+                    // console.log(res)
+                    // console.log("#######################################")
                     this.tableData = res.records
                 })
             },
@@ -240,7 +242,7 @@
     width: 250px;
     position: relative;
     top: -620px;
-    right: 200px;
+    right: 110px;
 
     .news {
       border: 1px solid #e4e4e4;
@@ -398,7 +400,7 @@
   .cat {
     margin: 0 auto;
     height: 40px;
-    width: 800px;
+    width: 780px;
     position: relative;
     top: -70px;
     font: 18px "Microsoft YaHei";

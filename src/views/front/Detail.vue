@@ -18,7 +18,7 @@
                                 <div class="title">报名费用：</div>
                                 <div class="price">
                                     <i>¥</i>
-                                    <em>{{tableData.expense}}</em>
+                                    <em>{{ tableData.expense }}</em>
                                 </div>
                             </div>
                         </div>
@@ -56,7 +56,7 @@
 
                             <div class="add">
                                 <el-button type="primary" @click="prePay">加入预报名</el-button>
-                                <el-button type="danger">立即报名</el-button>
+                                <el-button type="danger" @click="payOrder">立即报名</el-button>
                             </div>
                         </div>
                     </div>
@@ -64,13 +64,13 @@
             </div>
         </section>
         <!-- 内容详情页 -->
-        <el-collapse  style="width: 600px;position: relative;right: -680px">
+        <el-collapse style="width: 600px;position: relative;right: -680px">
             <el-collapse-item title="资格证书简介" name="1">
-                <div>{{tableData.detail}}</div>
+                <pre>{{ tableData.detail }}</pre>
 
             </el-collapse-item>
             <el-collapse-item title="发起依据" name="2">
-                <div>{{tableData.basis}}</div>
+                <div>{{ tableData.basis }}</div>
             </el-collapse-item>
         </el-collapse>
     </div>
@@ -83,7 +83,7 @@
             return {
                 examName: this.$route.params.examName,
                 tableData: {},
-                user:localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")).id : {},
+                user: localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")).id : {},
             }
         },
         created() {
@@ -98,12 +98,12 @@
                     }
                 })
             },
-            prePay(){
-                if (this.user==null){
+            prePay() {
+                if (this.user == null) {
                     this.$router.push("/login")
                     this.$message.error("请登录")
-                }else {
-                    this.request.get("/sign/pre",{
+                } else {
+                    this.request.get("/sign/pre", {
                         params: {
                             userId: this.user,
                             examId: this.tableData.id,
@@ -112,11 +112,54 @@
                     }).then(res => {
                         if (res.code === '200') {
                             this.$message.success("成功加入预报名")
-                        }else {
+                        } else {
                             this.$message.error(res.msg)
                         }
                     })
                 }
+
+            },
+            payOrder() {
+                this.request.get("/sign/check/" + this.tableData.id).then(res => {
+                    if (res.code === '200') {
+                        if (res.data != null) {
+                            //如果data不为空的情况，说明已经加入了预报名，无需在要求后台创建关系表，直接跳转到支付界面
+                            this.$router.push({
+                                name: 'Pay',
+                                params: {
+                                    examId: this.tableData.id,
+                                    total: this.tableData.expense
+                                }
+                            })
+                        } else {
+                            //如果data为空，说明还没有加入预报名，所以要想后台请求创建关系表，在跳转到支付界面
+                            this.request.get("/sign/pre", {
+                                params: {
+                                    userId: this.user,
+                                    examId: this.tableData.id,
+                                    ispay: 0
+                                }
+                            }).then(res => {
+                                if (res.code === '200') {
+
+                                    this.$message.success("成功加入预报名,正在跳转支付界面")
+                                    this.$router.push({
+                                        name: 'Pay',
+                                        params: {
+                                            examId: this.tableData.id,
+                                            total: this.tableData.expense
+                                        }
+                                    })
+                                } else {
+                                    this.$message.error(res.msg)
+                                }
+                            })
+                        }
+
+                    } else {
+                        this.$message.error(res.msg)
+                    }
+                })
 
             }
         }

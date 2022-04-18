@@ -14,6 +14,7 @@ import Pay from "@/views/front/Pay";
 import PaySuccess from "@/views/front/PaySuccess";
 import Competition from "@/views/front/Competition";
 import DetailCompetition from "@/views/front/DetailCompetition";
+import FrontArticle from "@/views/front/FrontArticle";
 
 
 Vue.use(VueRouter)
@@ -96,7 +97,17 @@ const routes = [
                 path: 'detailCompetition/:id',
                 name: 'DetailCompetition',
                 component: DetailCompetition,
-            }
+            },
+            {
+                path: 'article',
+                name: 'FrontArticle',
+                component: FrontArticle,
+            },
+            {
+                path: 'articleDetail',
+                name: 'ArticleDetail',
+                component: () => import('../views/front/ArticleDetail')
+            },
 
         ]
     }

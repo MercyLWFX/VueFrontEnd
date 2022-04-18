@@ -7,20 +7,38 @@
             <el-form-item label="比赛地址" prop="address">
                 <el-input v-model="ruleForm.address"></el-input>
             </el-form-item>
-            <el-form-item label="报名时间" required>
+            <el-form-item label="比赛时间" required>
+                <div class="block">
+<!--                    <p>组件值：{{ ruleForm.stat }}{{ ruleForm.end }}</p>-->
+                    <el-date-picker
+                            v-model="value2"
+                            type="daterange"
+                            value-format="yyyy-MM-dd"
+                            align="right"
+                            unlink-panels
+                            range-separator="至"
+                            start-placeholder="开始日期"
+                            end-placeholder="结束日期"
+                            :picker-options="pickerOptions">
+                    </el-date-picker>
+                </div>
+            </el-form-item>
+<!--            <el-form-item label="报名时间" required>
                 <el-col :span="11">
                     <el-form-item prop="date1">
-                        <el-date-picker type="date" placeholder="选择报名开始时间" value-format="yyyy-MM-dd" v-model="ruleForm.start" style="width: 100%;"></el-date-picker>
+                        <el-date-picker type="date" placeholder="选择报名开始时间" value-format="yyyy-MM-dd"
+                                        v-model="ruleForm.start" style="width: 100%;"></el-date-picker>
                     </el-form-item>
                 </el-col>
             </el-form-item>
             <el-form-item label="结束时间" required>
                 <el-col :span="11">
                     <el-form-item prop="date1">
-                        <el-date-picker type="date" placeholder="选择报名结束时间" value-format="yyyy-MM-dd" v-model="ruleForm.end" style="width: 100%;"></el-date-picker>
+                        <el-date-picker type="date" placeholder="选择报名结束时间" value-format="yyyy-MM-dd"
+                                        v-model="ruleForm.end" style="width: 100%;"></el-date-picker>
                     </el-form-item>
                 </el-col>
-            </el-form-item>
+            </el-form-item>-->
             <el-form-item label="竞赛性质" prop="types">
                 <el-select v-model="ruleForm.types" placeholder="请选择比赛性质">
                     <el-option label="创业大赛" value="创业大赛"></el-option>
@@ -74,7 +92,7 @@
 
 <script>
     export default {
-        name:'ReleaseExam',
+        name: 'ReleaseExam',
         data() {
             return {
                 ruleForm: {
@@ -88,39 +106,70 @@
                     detail: '',
                 },
                 rules: {
-                    name:[
-                        { required: true, message: '请输入活动名称', trigger: 'blur' },
-                        { min: 3, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+                    name: [
+                        {required: true, message: '请输入活动名称', trigger: 'blur'},
+                        {min: 3, message: '长度在 3 到 5 个字符', trigger: 'blur'}
                     ],
                     address: [
-                        { required: true, message: '请输入活动区域', trigger: 'blur' }
+                        {required: true, message: '请输入活动区域', trigger: 'blur'}
                     ],
                     start: [
-                        { type: 'date', required: true, message: '请选择开始日期', trigger: 'change' }
+                        {type: 'date', required: true, message: '请选择开始日期', trigger: 'change'}
                     ],
                     end: [
-                        { type: 'date', required: true, message: '请选择结束时间', trigger: 'change' }
+                        {type: 'date', required: true, message: '请选择结束时间', trigger: 'change'}
                     ],
                     types: [
-                        { required: true, message: '请至少选择一个活动性质', trigger: 'change' }
+                        {required: true, message: '请至少选择一个活动性质', trigger: 'change'}
                     ],
                     master: [
-                        { required: true, message: '请输入比赛主办方', trigger: 'blur' }
+                        {required: true, message: '请输入比赛主办方', trigger: 'blur'}
                     ],
                     detail: [
-                        { required: true, message: '请填写详情信息', trigger: 'blur' }
+                        {required: true, message: '请填写详情信息', trigger: 'blur'}
                     ]
-                }
+                },
+                pickerOptions: {
+                    shortcuts: [{
+                        text: '最近一周',
+                        onClick(picker) {
+                            const end = new Date();
+                            const start = new Date();
+                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+                            picker.$emit('pick', [start, end]);
+                        }
+                    }, {
+                        text: '最近一个月',
+                        onClick(picker) {
+                            const end = new Date();
+                            const start = new Date();
+                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+                            picker.$emit('pick', [start, end]);
+                        }
+                    }, {
+                        text: '最近三个月',
+                        onClick(picker) {
+                            const end = new Date();
+                            const start = new Date();
+                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+                            picker.$emit('pick', [start, end]);
+                        }
+                    }]
+                },
+                value2: ''
             };
         },
         methods: {
             submitForm(formName) {
+                this.ruleForm.start=this.value2[0]
+                this.ruleForm.end=this.value2[1]
+                // console.log(this.ruleForm)
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         this.request.post("/competition/insert", this.ruleForm).then(res => {
                             if (res.code === '200') {
                                 this.$message.success("保存成功")
-                                this.ruleForm={}
+                                this.ruleForm = {}
                             } else {
                                 this.$message.error(res.msg)
                             }
@@ -132,11 +181,18 @@
                 });
             },
             resetForm(formName) {
-                this.ruleForm={};
+                this.ruleForm = {};
             },
             handleAvatarSuccess(res) {
                 this.ruleForm.imgurl = res
             },
+        },
+        watch:{
+            value2:{
+                handler(val1,val2){
+                    console.log(val1)
+                }
+            }
         }
     }
 </script>
