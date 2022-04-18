@@ -62,9 +62,11 @@
                 </el-table-column>
                 <el-table-column prop="money" label="账户余额">
                 </el-table-column>
-                <el-table-column label="操作" width="200" align="center">
+                <el-table-column label="操作" width="300" align="center">
                     <template slot-scope="scope">
-                        <el-button type="success" @click="handleEdit(scope.row)">编辑 <i class="el-icon-edit"></i>
+                        <el-button type="warning" v-if="scope.row.rolename!='ROLE_USER'"  @click="doExam(scope.row.id)">查看竞赛信息
+                        </el-button>
+                            <el-button type="success" @click="handleEdit(scope.row)">编辑 <i class="el-icon-edit"></i>
                         </el-button>
                         <el-popconfirm
                                 class="ml-5"
@@ -123,6 +125,14 @@
                 <el-button type="primary" @click="save">确 定</el-button>
             </div>
         </el-dialog>
+        <el-dialog title="竞赛信息" :visible.sync="vis" width="30%">
+            <el-table :data="exam" border stripe>
+                <el-table-column prop="name" label="考试名称">
+                </el-table-column>
+                <el-table-column prop="types" label="竞赛类别">
+                </el-table-column>
+            </el-table>
+        </el-dialog>
     </div>
 </template>
 
@@ -139,6 +149,8 @@
                 email: null,
                 roles: [],
                 roleid: null,
+                exam:[],
+                vis: false,
                 dialogFormVisible: false,
                 multipleSelection: [],
                 form: {
@@ -259,6 +271,19 @@
             },
             exp(){
                window.open("http://localhost:9090/user/export")
+            },
+            doExam(val){
+                this.request.get("/competition/id", {
+                    params:{
+                        userId:val
+                    }
+                }).then(res => {
+                    if (res.code==='200') {
+                        console.log(res)
+                        this.exam=res.data
+                        this.vis=true
+                    }
+                })
             }
         },
 

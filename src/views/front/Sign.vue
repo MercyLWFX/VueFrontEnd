@@ -46,62 +46,82 @@
                     show-overflow-tooltip
             >
             </el-table-column>
-<!--            <el-table-column
-                    label="操作"
-                    show-overflow-tooltip>
-                <template slot-scope="scope">
-                    <el-button type="primary">支付</el-button>
-                    <el-popconfirm
-                            class="ml-5"
-                            confirm-button-text='确定吗'
-                            cancel-button-text='再想想'
-                            icon="el-icon-info"
-                            icon-color="red"
-                            title="您确定删除吗？"
-                            @confirm="del(scope.row.id)"
-                    >
-                        <el-button type="danger" slot="reference">删除 <i class="el-icon-remove-outline"></i>
-                        </el-button>
-                    </el-popconfirm>
-                </template>
-            </el-table-column>-->
+
+            <!--            <el-table-column
+                                label="操作"
+                                show-overflow-tooltip>
+                            <template slot-scope="scope">
+                                <el-button type="primary">支付</el-button>
+                                <el-popconfirm
+                                        class="ml-5"
+                                        confirm-button-text='确定吗'
+                                        cancel-button-text='再想想'
+                                        icon="el-icon-info"
+                                        icon-color="red"
+                                        title="您确定删除吗？"
+                                        @confirm="del(scope.row.id)"
+                                >
+                                    <el-button type="danger" slot="reference">删除 <i class="el-icon-remove-outline"></i>
+                                    </el-button>
+                                </el-popconfirm>
+                            </template>
+                        </el-table-column>-->
         </el-table>
+        <el-button type="danger" style="position: relative;left: 700px" size="big" @click="change">点击切换已报资格证或竞赛
+        </el-button>
     </div>
 </template>
 
 <script>
     export default {
-        name:"Sign",
+        name: "Sign",
         data() {
             return {
                 tableData: [],
                 multipleSelection: [],
-                user:localStorage.getItem("user")? JSON.parse(localStorage.getItem("user")):{},
-                total:0
+                user: localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : {},
+                total: 0,
+                flag: false
             }
         },
         created() {
             this.load()
         },
-
         methods: {
-            load(){
-                if (this.user=={}){
+            load() {
+                if (this.user == {}) {
                     this.$router.push("/login")
                     this.$message.error("请登录")
-                }else {
-                    this.request.get("/sign/dopay",{
+                } else {
+                    this.request.get("/sign/dopay", {
                         params: {
                             userId: this.user.id,
                         }
                     }).then(res => {
-                        console.log(res.data[0])
+                        // console.log(res.data[0])
                         if (res.code === '200') {
-                            this.tableData=res.data[0].exams
+                            this.tableData = res.data[0].exams
                         }
                     })
                 }
             },
+            loadPayCompetition() {
+                this.request.get("/sign/payCompetition", {
+                    params: {
+                        userId: this.user.id,
+                    }
+                }).then(res => {
+                    console.log(res)
+                    if (res.code === '200') {
+                        this.tableData = res.data[0].competitions
+                        console.log(this.tableData)
+                        this.tableData.forEach((val)=>{
+                            val.examName=val.name
+                        })
+                    }
+                })
+            },
+
             handleSelectionChange(val) {
                 // this.total=0
                 // if (this.multipleSelection){
@@ -111,15 +131,15 @@
                 // }
                 this.multipleSelection = val;
             },
-            headClass () {
+            headClass() {
                 return 'text-align: center;background:#f5f5f5;'
             },
-            rowClass () {
+            rowClass() {
                 return 'text-align: center;'
             },
-            del(id){
+            del(id) {
                 console.log(id)
-                this.request.delete("/sign/del",{
+                this.request.delete("/sign/del", {
                     params: {
                         userId: this.user.id,
                         examId: id
@@ -135,7 +155,7 @@
             delBatch() {
                 let ids = this.multipleSelection.map(v => v.id)  //建一个对象的数组转为一个类似于[1,2,3]的数字
                 console.log(ids)
-                this.request.post("/user/batchdel",this.user.id,ids).then(res => {
+                this.request.post("/user/batchdel", this.user.id, ids).then(res => {
                     if (res) {
                         this.$message.success("批量删除成功")
                         this.load()
@@ -155,18 +175,28 @@
                     this.$refs.multipleTable.clearSelection();
                 }
             },
-        },
-        watch:{
-            multipleSelection:{
-                handler(newVal,oldVal){
-                    this.total=0
-                    newVal.forEach(row=>{
-                        this.total+=row.expense
-                    })
+
+            change() {
+                this.flag = !this.flag
+                if (this.flag) {
+                    this.load()
+                } else {
+                    this.loadPayCompetition()
                 }
-            }
-        }
-    }
+            },
+        },
+        // watch: {
+        //     multipleSelection: {
+        //         handler(newVal, oldVal) {
+        //             this.total = 0
+        //             newVal.forEach(row => {
+        //                 this.total += row.expense
+        //             })
+        //         }
+        //     }
+        // }
+    };
+
 </script>
 
 <style scoped lang="less">

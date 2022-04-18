@@ -6,9 +6,12 @@
 
 <style>
     .el-table--border th.gutter:last-of-type {
-        display: block!important;
-        width: 17px!important;
+        display: block !important;
+        width: 17px !important;
     }
+
+
+
 </style>
 <!--<template>-->
 <!--    <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">-->

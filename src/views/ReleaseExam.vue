@@ -10,14 +10,14 @@
             <el-form-item label="报名时间" required>
                 <el-col :span="11">
                     <el-form-item prop="date1">
-                        <el-date-picker type="date" placeholder="选择报名开始时间" v-model="ruleForm.start" style="width: 100%;"></el-date-picker>
+                        <el-date-picker type="date" placeholder="选择报名开始时间" value-format="yyyy-MM-dd" v-model="ruleForm.start" style="width: 100%;"></el-date-picker>
                     </el-form-item>
                 </el-col>
             </el-form-item>
             <el-form-item label="结束时间" required>
                 <el-col :span="11">
                     <el-form-item prop="date1">
-                        <el-date-picker type="date" placeholder="选择报名结束时间" v-model="ruleForm.end" style="width: 100%;"></el-date-picker>
+                        <el-date-picker type="date" placeholder="选择报名结束时间" value-format="yyyy-MM-dd" v-model="ruleForm.end" style="width: 100%;"></el-date-picker>
                     </el-form-item>
                 </el-col>
             </el-form-item>

@@ -240,7 +240,7 @@
     width: 250px;
     position: relative;
     top: -620px;
-    right: 120px;
+    right: 200px;
 
     .news {
       border: 1px solid #e4e4e4;

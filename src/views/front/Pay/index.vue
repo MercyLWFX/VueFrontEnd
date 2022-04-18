@@ -118,14 +118,19 @@
                         }
                     })
                     //修改余额过后，将未付修改为已付账单
-                    if (this.examId.length>0){
+                    if (this.examId.length>0&&this.examId.length<18){
+                        console.log("啦啦啦啦啦啦啦，我就是数组，气死你")
                         let ids=this.examId
                         this.request.post("/sign/changeList",ids).then(res => {
                             if (res.code === '200') {
                                this.$message.success("支付成功")
                             }
                         })
+                        setTimeout(()=>{
+                            this.$router.push("/front/paySuccess")
+                        },2000)
                     }else {
+                        console.log("啦啦啦啦啦啦啦，我就是数字，爱你哦")
                         this.request.get("/sign/changeOne",{
                             params:{
                                 examId:this.examId
@@ -135,10 +140,11 @@
                                 this.$message.success("支付成功")
                             }
                         })
+                        setTimeout(()=>{
+                            this.$router.push("/front/paySuccess")
+                        },2000)
                     }
-                    setTimeout(()=>{
-                        this.$router.push("/front/paySuccess")
-                    },2000)
+
                 }
             }
         }

@@ -67,6 +67,9 @@
                 <div class="option">
                     <el-button type="warning" @click="delBatch">删除选中的商品</el-button>
                 </div>
+                <div class="option">
+                    <el-button type="warning" @click="change">点击切换资格证或竞赛预报名</el-button>
+                </div>
                 <div class="money-box">
                     <div class="chosed">已选择
                         <span>0</span>件商品</div>
@@ -94,7 +97,8 @@
                 tableData: [],
                 multipleSelection: [],
                 user:localStorage.getItem("user")? JSON.parse(localStorage.getItem("user")):{},
-                total:0
+                total:0,
+                flag:false
             }
         },
         created() {
@@ -112,7 +116,7 @@
                             userId: this.user.id,
                         }
                     }).then(res => {
-                        console.log(res.data[0])
+                        // console.log(res.data[0])
                         if (res.code === '200') {
                             this.tableData=res.data[0].exams
                             // console.log("***********************************************************")
@@ -120,6 +124,23 @@
                         }
                     })
                 }
+            },
+            loadCompetition(){
+                this.request.get("/sign/prepayII",{
+                    params: {
+                        userId: this.user.id,
+                    }
+                }).then(res => {
+                    console.log(res)
+                    if (res.code === '200') {
+                        this.tableData=res.data[0].competitions
+                        this.tableData.forEach((val)=>{
+                            val.examName=val.name
+                        })
+                        console.log("***********************************************************")
+                        console.log(this.tableData)
+                    }
+                })
             },
             handleSelectionChange(val) {
                 this.multipleSelection = val;
@@ -186,6 +207,14 @@
                         total:this.total,
                     }
                 })
+            },
+            change(){
+                this.flag=!this.flag
+                if (this.flag==false){
+                    this.load();
+                }else {
+                    this.loadCompetition();
+                }
             }
         },
         watch:{

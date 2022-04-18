@@ -12,6 +12,8 @@ import QualificationClass from "@/views/QualificationClass";
 import Exam from "@/views/Exam";
 import Pay from "@/views/front/Pay";
 import PaySuccess from "@/views/front/PaySuccess";
+import Competition from "@/views/front/Competition";
+import DetailCompetition from "@/views/front/DetailCompetition";
 
 
 Vue.use(VueRouter)
@@ -84,6 +86,16 @@ const routes = [
                 path: 'paySuccess',
                 name: 'PaySuccess',
                 component: PaySuccess,
+            },
+            {
+                path: 'competition',
+                name: 'Competition',
+                component: Competition,
+            },
+            {
+                path: 'detailCompetition/:id',
+                name: 'DetailCompetition',
+                component: DetailCompetition,
             }
 
         ]
